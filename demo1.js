@@ -1,4 +1,5 @@
 var Crawler = require('crawler');
+var Insert = require('./database/insertTop250')
 var c = new Crawler({
   callback: function (err, res, done) {
     if (err) {
@@ -10,7 +11,6 @@ var c = new Crawler({
     done();
   }
 })
-var public_$;
 var movies = [];
 
 c.queue([{
@@ -20,8 +20,8 @@ c.queue([{
       console.log(err);
     } else {
       var $ = res.$;
-      public_$ = $;
-      console.log(filtMovie($));
+      // console.log(filtMovie($));
+      Insert(filtMovie($));
     }
     done();
   }
@@ -37,14 +37,14 @@ function filtInfo ($) {
   let img = getImg($);
   let title = getTitle($);
   let cast = getCast($);
-  let rate = getRate($);
+  // let rate = getRate($);
   for (let i = 0; i < title.length; i++) {
     let unit = new Object();
     unit.img = img[i];
     unit.url = url[i];
     unit.title = title[i];
     unit.cast = cast[i];
-    unit.rate = rate[i];
+    // unit.rate = rate[i];
     out.push(unit);
   }
   return out;
@@ -88,5 +88,16 @@ function getRate ($) {
     obj.mount = $(this).find('span').last().text();
     result[i] = obj;
   });
+  return result;
+}
+
+function object2Array (o) {
+  let result = [];
+  for (let i = 0; i < o.length; i++) {
+    result[i] = [];
+    for (let j in o[i]) {
+      result[i].push(o[i][j]);
+    }
+  }
   return result;
 }
