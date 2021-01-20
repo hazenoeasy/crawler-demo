@@ -1,5 +1,5 @@
 var Crawler = require('crawler');
-var Insert = require('./database/insertTop250')
+var Insert = require('../database/insertTop250')
 var c = new Crawler({
   callback: function (err, res, done) {
     if (err) {
